@@ -12,8 +12,8 @@ void setup() {
 void loop() {
   lcd.clear();
   lcd.setCursor(1,0)      
-  lcd.print("I am currently");
+  lcd.print("Hello");
   lcd.setCursor(1,1);
-  lcd.print("working!!");
+  lcd.print("World");
 
 }
