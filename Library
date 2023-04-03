@@ -18,3 +18,4 @@ autoscroll() //This will 'right justify' text from the cursor
 noAutoscroll() //This will 'left justify' text from the cursor
 leftToRight() //This is for text that flows Left to Right
 rightToLeft() //This is for text that flows Right to Left
+print()
