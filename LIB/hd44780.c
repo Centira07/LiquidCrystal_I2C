@@ -88,3 +88,22 @@ void LiquidCrystal_I2C::init_priv()
 	begin(_cols, _rows);  
 }
 
+void LiquidCrystal_I2C::clear(){
+	command(LCD_CLEARDISPLAY);// clear display, set cursor position to zero
+	delayMicroseconds(2000);  // this command takes a long time!
+  if (_oled) setCursor(0,0);
+}
+
+void LiquidCrystal_I2C::home(){
+	command(LCD_RETURNHOME);  // set cursor position to zero
+	delayMicroseconds(2000);  // this command takes a long time!
+}
+
+void LiquidCrystal_I2C::setCursor(uint8_t col, uint8_t row){
+	int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+	if ( row > _numlines ) {
+		row = _numlines-1;    // we count rows starting w/0
+	}
+	command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
+}
+
