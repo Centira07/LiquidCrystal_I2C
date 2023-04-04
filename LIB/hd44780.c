@@ -71,3 +71,20 @@ void LiquidCrystal_I2C::begin() {
 
 	home();
 }
+
+void LiquidCrystal_I2C::oled_init(){
+  _oled = true;
+	init_priv();
+}
+
+void LiquidCrystal_I2C::init(){
+	init_priv();
+}
+
+void LiquidCrystal_I2C::init_priv()
+{
+	Wire.begin();
+	_displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
+	begin(_cols, _rows);  
+}
+
