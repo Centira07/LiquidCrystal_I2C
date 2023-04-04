@@ -107,3 +107,40 @@ void LiquidCrystal_I2C::setCursor(uint8_t col, uint8_t row){
 	command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
 }
 
+void LiquidCrystal_I2C::noDisplay() {
+	_displaycontrol &= ~LCD_DISPLAYON;
+	command(LCD_DISPLAYCONTROL | _displaycontrol);
+}
+
+void LiquidCrystal_I2C::display() {
+	_displaycontrol |= LCD_DISPLAYON;
+	command(LCD_DISPLAYCONTROL | _displaycontrol);
+}
+
+void LiquidCrystal_I2C::noCursor() {
+	_displaycontrol &= ~LCD_CURSORON;
+	command(LCD_DISPLAYCONTROL | _displaycontrol);
+}
+
+void LiquidCrystal_I2C::cursor() {
+	_displaycontrol |= LCD_CURSORON;
+	command(LCD_DISPLAYCONTROL | _displaycontrol);
+}
+
+void LiquidCrystal_I2C::noBlink() {
+	_displaycontrol &= ~LCD_BLINKON;
+	command(LCD_DISPLAYCONTROL | _displaycontrol);
+}
+
+void LiquidCrystal_I2C::blink() {
+	_displaycontrol |= LCD_BLINKON;
+	command(LCD_DISPLAYCONTROL | _displaycontrol);
+}
+
+void LiquidCrystal_I2C::scrollDisplayLeft(void) {
+	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
+}
+
+void LiquidCrystal_I2C::scrollDisplayRight(void) {
+	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
+}
