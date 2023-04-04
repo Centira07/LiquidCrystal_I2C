@@ -69,10 +69,28 @@ public:
   void backlight();
   void autoscroll();
   void noAutoscroll(); 
-  void createChar(uint8_t, uint8_t[]);
-  void createChar(uint8_t location, const char *charmap);
+  void createChar(uint8_t num, const char *charmap);
   void setCursor(uint8_t x, uint8_t y);
+  virtual size_t write(uint8_t character);
+  void command(uint8_t);
+  void init();
+  void oled_init();
   
+private:
+  void init_priv();
+  void send(uint8_t, uint8_t);
+  void write4bits(uint8_t);
+  void expanderWrite(uint8_t);
+  void pulseEnable(uint8_t);
+  uint8_t _Addr;
+  uint8_t _displayfunction;
+  uint8_t _displaycontrol;
+  uint8_t _displaymode;
+  uint8_t _numlines;
+  bool _oled = false;
+  uint8_t _cols;
+  uint8_t _rows;
+  uint8_t _backlightval;
 };
 
 #endif
