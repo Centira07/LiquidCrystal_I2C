@@ -76,6 +76,15 @@ public:
   void init();
   void oled_init();
   
+//function alias
+  void blink_on();						// alias for blink()
+  void blink_off();       					// alias for noBlink()
+  void cursor_on();      	 					// alias for cursor()
+  void cursor_off();      					// alias for noCursor()
+  void setBacklight(uint8_t new_val);				// alias for backlight() and nobacklight()
+  void load_custom_character(uint8_t char_num, uint8_t *rows);	// alias for createChar()
+  void printstr(const char[]); // alias for write()
+  
 private:
   void init_priv();
   void send(uint8_t, uint8_t);
