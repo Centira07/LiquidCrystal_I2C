@@ -3,11 +3,11 @@
 
 int main(void)
 {
-  LiquidCrystal_I2C(0x27, 16, 2);
-  begin();
-  backlight();
-  setCursor(0,0);
-  printstr("Hello World");
+  LiquidCrystalDevice device = init(0x27, 16, 2, LCD_5x8DOTS);
+  turnOnBacklight(&device);
+  
+  setCursor(&device,0,0);
+  print(&device, "Hello World");
   
   while(1);
   
