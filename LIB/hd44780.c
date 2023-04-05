@@ -108,3 +108,125 @@ void setCursor(LiquidCrystalDevice* device, uint8_t row, uint8_t column)
 
 	sendCommand(device, LCD_SETDDRAMADDR | (column + row_offsets[row]));
 }
+
+void returnHome(LiquidCrystalDevice* device)
+{
+	sendCommand(device, LCD_RETURNHOME);  // set cursor position to zero
+	_delay_us(2000);  // this command takes a long time!
+};
+
+void turnOnDisplay(LiquidCrystalDevice* device)
+{
+	device->DisplayControl |= LCD_DISPLAYON;
+	sendCommand(device, LCD_DISPLAYCONTROL | device->DisplayControl);
+};
+
+void turnOffDisplay(LiquidCrystalDevice* device)
+{
+	device->DisplayControl &= ~LCD_DISPLAYON;
+	sendCommand(device, LCD_DISPLAYCONTROL | device->DisplayControl);
+};
+
+void turnOnCursor(struct LiquidCrystalDevice* device)
+{
+	device->DisplayControl |= LCD_CURSORON;
+	sendCommand(device, LCD_DISPLAYCONTROL | device->DisplayControl);
+}
+
+void turnOffCursor(struct LiquidCrystalDevice* device)
+{
+	device->DisplayControl &= ~LCD_CURSORON;
+	sendCommand(device, LCD_DISPLAYCONTROL | device->DisplayControl);
+}
+
+void turnOnBlink(struct LiquidCrystalDevice* device)
+{
+	device->DisplayControl |= LCD_BLINKON;
+	sendCommand(device, LCD_DISPLAYCONTROL | device->DisplayControl);
+}
+
+void turnOffBlink(struct LiquidCrystalDevice* device)
+{
+	device->DisplayControl &= ~LCD_BLINKON;
+	sendCommand(device, LCD_DISPLAYCONTROL | device->DisplayControl);
+}
+
+void scrollDisplayLeft(struct LiquidCrystalDevice* device)
+{
+	sendCommand(device, LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
+}
+
+void scrollDisplayRight(struct LiquidCrystalDevice* device)
+{
+	sendCommand(device, LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
+}
+
+void leftToRight(struct LiquidCrystalDevice* device)
+{
+	device->DisplayMode |= LCD_ENTRYLEFT;
+	sendCommand(device, LCD_ENTRYMODESET | device->DisplayMode);
+}
+
+void rightToLeft(struct LiquidCrystalDevice* device)
+{
+	device->DisplayMode &= ~LCD_ENTRYLEFT;
+	sendCommand(device, LCD_ENTRYMODESET | device->DisplayMode);
+}
+
+void turnOnAutoscroll(struct LiquidCrystalDevice* device)
+{
+	device->DisplayMode |= LCD_ENTRYSHIFTINCREMENT;
+	sendCommand(device, LCD_ENTRYMODESET | device->DisplayMode);
+}
+
+void turnOffAutoscroll(struct LiquidCrystalDevice* device)
+{
+	device->DisplayMode &= ~LCD_ENTRYSHIFTINCREMENT;
+	sendCommand(device, LCD_ENTRYMODESET | device->DisplayMode);
+}
+
+void createChar(struct LiquidCrystalDevice* device, uint8_t slot, uint8_t charmap[8])
+{
+	uint8_t i = 0;
+	slot &= 0x7; // we only have 8 locations 0-7
+	sendCommand(device, LCD_SETCGRAMADDR | (slot << 3));
+
+	for (i = 0; i < 8; i++) 
+	{
+		writeDeviceByte(device, charmap[i], LCD_REGISTER_SELECT_BIT);
+	}
+}
+
+void sendCommand(LiquidCrystalDevice* device, uint8_t command)
+{
+	writeDeviceByte(device, command, 0);
+}
+
+void writeDeviceByte(LiquidCrystalDevice* device, uint8_t value, uint8_t mode)
+{
+	uint8_t highnib= value & 0xf0;
+	uint8_t lownib= (value<<4) & 0xf0;
+
+	writeDevice4Bits(device, highnib | mode);
+	writeDevice4Bits(device, lownib | mode);
+};
+
+void writeDevice4Bits(LiquidCrystalDevice* device, uint8_t value)
+{
+	transmitI2C(device, value);
+	writeDevicePulse(device, value);
+};
+
+void writeDevicePulse(LiquidCrystalDevice_t* device, uint8_t value)
+{
+	transmitI2C(device, value | LCD_ENABLE_BIT);
+	_delay_us(2);
+
+	transmitI2C(device, value & ~LCD_ENABLE_BIT);
+	_delay_us(50);
+};
+
+void transmitI2C(LiquidCrystalDevice_t* device, uint8_t value)
+{
+	i2c_master_sendByte(device->Address, value | device->Backlight);
+};
