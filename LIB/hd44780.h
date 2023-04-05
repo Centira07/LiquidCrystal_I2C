@@ -2,7 +2,12 @@
 #define hd44780_h
 
 #include <inttypes.h>
+#include <avr/io.h>
 #include <Print.h>
+
+#ifndef  F_CPU
+#define F_CPU 16000000UL
+#endif
 
 //commands
 #define LCD_CLEARDISPLAY 0x01
@@ -45,61 +50,63 @@
 #define Rw B00000010  // Read/Write bit
 #define Rs B00000001  // Register select bit
 
-class LiquidCrystal_I2C : public Print {
-public:
-  LiquidCrystal_I2C(uint8_t addr, uint8_t cols, uint8_t rows);
-  void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS);
-  void clear();
-  void home();
-  void noDisplay();
-  void display();
-  void noBlink();
-  void blink();
-  void noCursor();
-  void cursor();
-  void scrollDisplayLeft();
-  void scrollDisplayRight();
-  void printLeft();
-  void printRight();
-  void leftToRight();
-  void rightToLeft();
-  void shiftIncrement();
-  void shiftDecrement();
-  void noBacklight();
-  void backlight();
-  void autoscroll();
-  void noAutoscroll(); 
-  void createChar(uint8_t num, const char *charmap);
-  void setCursor(uint8_t x, uint8_t y);
-  virtual size_t write(uint8_t character);
-  void command(uint8_t);
-  void init();
-  void oled_init();
-  
-//function alias
-  void blink_on();						// alias for blink()
-  void blink_off();       					// alias for noBlink()
-  void cursor_on();      	 					// alias for cursor()
-  void cursor_off();      					// alias for noCursor()
-  void setBacklight(uint8_t new_val);				// alias for backlight() and nobacklight()
-  void load_custom_character(uint8_t char_num, uint8_t *rows);	// alias for createChar()
-  void printstr(const char[]); // alias for write()
-  
-private:
-  void init_priv();
-  void send(uint8_t, uint8_t);
-  void write4bits(uint8_t);
-  void expanderWrite(uint8_t);
-  void pulseEnable(uint8_t);
-  uint8_t _Addr;
-  uint8_t _displayfunction;
-  uint8_t _displaycontrol;
-  uint8_t _displaymode;
-  uint8_t _numlines;
-  bool _oled = false;
-  uint8_t _cols;
-  uint8_t _rows;
-  uint8_t _backlightval;
-};
+typedef struct LiquidCrystalDevice {
+	uint8_t Address;
+	uint8_t Columns;
+	uint8_t Rows;
+	uint8_t Backlight;
+	uint8_t DisplayFunction;
+	uint8_t DisplayControl;
+	uint8_t DisplayMode;
+} LiquidCrystalDevice;
+
+struct LiquidCrystalDevice init(uint8_t address, uint8_t columns, uint8_t rows, uint8_t dotSize);
+void clear(struct LiquidCrystalDevice* device);
+
+void setCursor(struct LiquidCrystalDevice* device, uint8_t row, uint8_t column);
+
+void returnHome(struct LiquidCrystalDevice* device);
+
+void turnOnBacklight(struct LiquidCrystalDevice* device);
+
+void turnOffBacklight(struct LiquidCrystalDevice* device);
+
+void print(struct LiquidCrystalDevice* device, char* value);
+
+void turnOnDisplay(struct LiquidCrystalDevice* device);
+
+void turnOffDisplay(struct LiquidCrystalDevice* device);
+
+void lq_turnOnCursor(struct LiquidCrystalDevice_t* device);
+
+void turnOffCursor(struct LiquidCrystalDevice* device);
+
+void turnOnBlink(struct LiquidCrystalDevice* device);
+
+void turnOffBlink(struct LiquidCrystalDevice* device);
+
+void scrollDisplayLeft(struct LiquidCrystalDevice* device);
+
+void scrollDisplayRight(struct LiquidCrystalDevice* device);
+
+void leftToRight(struct LiquidCrystalDevice* device);
+
+void rightToLeft(struct LiquidCrystalDevice* device);
+
+void turnOnAutoscroll(struct LiquidCrystalDevice* device);
+
+void turnOffAutoscroll(struct LiquidCrystalDevice* device);
+
+void createChar(struct LiquidCrystalDevice* device, uint8_t slot, uint8_t charmap[8]);
+
+void sendCommand(struct LiquidCrystalDevice* device, uint8_t command);
+
+void writeDeviceByte(struct LiquidCrystalDevice* device, uint8_t value, uint8_t mode);
+
+void writeDevice4Bits(struct LiquidCrystalDevice* device, uint8_t value);
+
+void writeDevicePulse(struct LiquidCrystalDevice* device, uint8_t value);
+
+void transmitI2C(struct LiquidCrystalDevice* device, uint8_t value);
 
 #endif
