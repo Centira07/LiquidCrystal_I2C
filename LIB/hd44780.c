@@ -144,3 +144,26 @@ void LiquidCrystal_I2C::scrollDisplayLeft(void) {
 void LiquidCrystal_I2C::scrollDisplayRight(void) {
 	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
 }
+
+// This is for text that flows Left to Right
+void LiquidCrystal_I2C::leftToRight(void) {
+	_displaymode |= LCD_ENTRYLEFT;
+	command(LCD_ENTRYMODESET | _displaymode);
+}
+
+// This is for text that flows Right to Left
+void LiquidCrystal_I2C::rightToLeft(void) {
+	_displaymode &= ~LCD_ENTRYLEFT;
+	command(LCD_ENTRYMODESET | _displaymode);
+}
+
+void LiquidCrystal_I2C::autoscroll(void) {
+	_displaymode |= LCD_ENTRYSHIFTINCREMENT;
+	command(LCD_ENTRYMODESET | _displaymode);
+}
+
+void LiquidCrystal_I2C::noAutoscroll(void) {
+	_displaymode &= ~LCD_ENTRYSHIFTINCREMENT;
+	command(LCD_ENTRYMODESET | _displaymode);
+}
+
