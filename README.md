@@ -25,7 +25,6 @@ typedef struct LiquidCrystalDevice {
 	uint8_t DisplayControl;
 	
 	uint8_t DisplayMode;
-	
 } LiquidCrystalDevice;
 
 Example of this initialization and other coding can be found in the examples photos with videos in the wiki.
