@@ -204,3 +204,55 @@ void LiquidCrystal_I2C::send(uint8_t value, uint8_t mode) {
 	write4bits((lownib)|mode); 
 }
 
+void LiquidCrystal_I2C::write4bits(uint8_t value) {
+	expanderWrite(value);
+	pulseEnable(value);
+}
+
+void LiquidCrystal_I2C::expanderWrite(uint8_t _data){
+	Wire.beginTransmission(_addr);
+	Wire.write((int)(_data) | _backlightval);
+	Wire.endTransmission();
+}
+
+void LiquidCrystal_I2C::pulseEnable(uint8_t _data){
+	expanderWrite(_data | En);	// En high
+	delayMicroseconds(1);		// enable pulse must be >450ns
+	
+	expanderWrite(_data & ~En);	// En low
+	delayMicroseconds(50);		// commands need > 37us to settle
+} 
+
+void LiquidCrystal_I2C::cursor_on(){
+	cursor();
+}
+
+void LiquidCrystal_I2C::cursor_off(){
+	noCursor();
+}
+
+void LiquidCrystal_I2C::blink_on(){
+	blink();
+}
+
+void LiquidCrystal_I2C::blink_off(){
+	noBlink();
+}
+
+void LiquidCrystal_I2C::load_custom_character(uint8_t char_num, uint8_t *rows){
+		createChar(char_num, rows);
+}
+
+void LiquidCrystal_I2C::setBacklight(uint8_t new_val){
+	if(new_val){
+		backlight();		// turn backlight on
+	}else{
+		noBacklight();		// turn backlight off
+	}
+}
+
+void LiquidCrystal_I2C::printstr(const char c[]){
+	//This function is not identical to the function used for "real" I2C displays
+	//it's here so the user sketch doesn't have to be changed 
+	print(c);
+}
