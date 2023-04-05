@@ -1,2 +1,15 @@
 #include <stdint.h>
 #include "lib/hd44780.h"
+
+int main(void)
+{
+  LiquidCrystal_I2C (0x27, 16, 2);
+  begin();
+  backlight();
+  setCursor(0,0);
+  printstr("Hello World");
+  
+  while(1);
+  
+  return 0;
+}
