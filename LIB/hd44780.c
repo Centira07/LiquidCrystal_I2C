@@ -2,7 +2,6 @@
 #include <inttypes.h>
 #include "Arduino.h"
 #include <Wire.h>
-#include "Print.h" 
 
 LiquidCrystal_I2C::LiquidCrystal_I2C(uint8_t lcd_addr, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
 {
