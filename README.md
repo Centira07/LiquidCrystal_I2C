@@ -12,6 +12,7 @@ The definition of this structure is:
 
 typedef struct LiquidCrystalDevice { 
 	uint8_t Address;
+	
 	uint8_t Columns;
 	uint8_t Rows;
 	uint8_t Backlight;
