@@ -11,13 +11,21 @@ This function accepts I2C shield address for LCD display, number of columns, row
 The definition of this structure is: 
 
 typedef struct LiquidCrystalDevice {
+
 	uint8_t Address;
+	
 	uint8_t Columns;
+	
 	uint8_t Rows;
+	
 	uint8_t Backlight;
+	
 	uint8_t DisplayFunction;
+	
 	uint8_t DisplayControl;
+	
 	uint8_t DisplayMode;
+	
 } LiquidCrystalDevice;
 
 Example of this initialization and other coding can be found in the examples photos with videos in the wiki.
