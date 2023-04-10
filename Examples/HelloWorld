@@ -7,7 +7,9 @@ int main(void)
   turnOnBacklight(&device);
   
   setCursor(&device,0,0);
-  print(&device, "Hello World");
+  print(&device, "Hello, World!");
+  setCursor(&device,0,1);
+  print(&device, "I am Working");
   
   while(1);
   
